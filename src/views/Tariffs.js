@@ -141,7 +141,7 @@ const Tariffs = () => {
                   className="tariffs-button"
                   startIcon={<AddIcon />}
                 >
-                  New Zone
+                  add New Zone
                 </Button>
                 <Button
                   variant="contained"
