@@ -18,3 +18,28 @@ code {
   padding: 7.4px 4px;
   width: 176px;
 }
+
+.tab-name {
+  min-width: 50px !important;
+  min-height: 30px !important;
+  padding: 4px 6px !important;
+  border: 1px solid #000 !important;
+  border-bottom: none !important;
+  border-top-left-radius: 5px !important;
+  border-top-right-radius: 5px !important;
+  margin-right: 1px !important;
+}
+
+/* .PrivateTabIndicator-colorSecondary-53 {
+  background-color: #3642eb !important;
+  height: 3px !important;
+  top: 0 !important;
+} */
+
+.tab-name .MuiTab-wrapper .MuiTypography-root {
+  display: flex !important;
+}
+
+.tariffs-button {
+  padding: 9px !important;
+}
