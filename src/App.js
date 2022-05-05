@@ -9,6 +9,7 @@ import CarTypes from "./views/CarTypes";
 import Bookings from "./views/Bookings";
 import Promos from "./views/Promos";
 import Zones from "./views/Zones";
+import Tariffs from "./views/Tariffs";
 import Users from "./views/Users";
 import Referral from "./views/Referral";
 import { fetchUser } from "./actions/authactions";
@@ -28,6 +29,7 @@ function App() {
             <ProtectedRoute exact component={Bookings} path="/bookings" />
             <ProtectedRoute exact component={Promos} path="/promos" />
             <ProtectedRoute exact component={Zones} path="/zones" />
+            <ProtectedRoute exact component={Tariffs} path="/tariffs" />
             <ProtectedRoute exact component={Users} path="/drivers" />
             <ProtectedRoute exact component={DriverEarning} path="/driverearning" />
             <ProtectedRoute exact component={Referral} path="/referral" />

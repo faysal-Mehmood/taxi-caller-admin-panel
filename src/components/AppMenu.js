@@ -12,6 +12,7 @@ import OfferIcon from "@material-ui/icons/LocalOffer";
 import PeopleIcon from "@material-ui/icons/People";
 import MoneyIcon from "@material-ui/icons/AttachMoney";
 import MapIcon from "@material-ui/icons/Map";
+import CasinoIcon from "@material-ui/icons/Casino";
 import NotifyIcon from "@material-ui/icons/NotificationsActive";
 import languageJson from "../config/language";
 import { signOut } from "../actions/authactions";
@@ -60,6 +61,13 @@ function AppMenu() {
             <MapIcon style={{ backgroundColor: "black", color: "white" }} />
           </ListItemIcon>
           <Typography variant="inherit">{languageJson.zones}</Typography>
+        </MenuItem>
+
+        <MenuItem component={Link} to="/tariffs">
+          <ListItemIcon>
+            <CasinoIcon style={{ backgroundColor: "black", color: "white" }} />
+          </ListItemIcon>
+          <Typography variant="inherit">{languageJson.tariffs}</Typography>
         </MenuItem>
         {/*  */}
 

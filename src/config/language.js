@@ -106,4 +106,5 @@ export default {
   zones_import_button: "IMPORT & EXPORT ZONES",
   zones_save_button: "SAVE",
   zone_search_text: "Search to filter list",
+  tariffs: "Tariffs",
 };
