@@ -1,84 +1,97 @@
-import React, { useState, useEffect } from 'react';
-import MaterialTable from 'material-table';
+import React, { useState, useEffect } from "react";
+import Tabs from "@material-ui/core/Tabs";
+import Tab from "@material-ui/core/Tab";
+import Typography from "@material-ui/core/Typography";
+import Box from "@material-ui/core/Box";
 import { useSelector, useDispatch } from "react-redux";
 import CircularLoading from "../components/CircularLoading";
-import languageJson from "../config/language";
-import {
-  editUser, deleteUser
-} from "../actions/usersactions";
+import Usertable from "./components/usertable/usertable";
+// tabpane component
+function TabPanel(props) {
+  const { children, value, index, ...other } = props;
+
+  return (
+    <div
+      role="tabpanel"
+      hidden={value !== index}
+      id={`simple-tabpanel-${index}`}
+      aria-labelledby={`simple-tab-${index}`}
+      {...other}
+    >
+      {value === index && (
+        <Box p={3}>
+          <Typography>{children}</Typography>
+        </Box>
+      )}
+    </div>
+  );
+}
 
 export default function Users() {
   const [data, setData] = useState([]);
   const [cars, setCars] = useState({});
-  const usersdata = useSelector(state => state.usersdata);
-  const cartypes = useSelector(state => state.cartypes);
+  const [adminData, setadminData] = useState();
+  const [driverData, setdriverData] = useState();
+  const usersdata = useSelector((state) => state.usersdata);
+  const cartypes = useSelector((state) => state.cartypes);
+  const [tabvalue, settabValue] = useState("Admin");
   const dispatch = useDispatch();
-
+  const handleChange = (event, newValue) => {
+    settabValue(newValue);
+  };
   useEffect(() => {
     if (usersdata.users) {
       setData(usersdata.users);
     }
   }, [usersdata.users]);
-
+  console.log("userdata", data);
   useEffect(() => {
     if (cartypes.cars) {
       let obj = {};
       console.log(cartypes.cars);
-      cartypes.cars.map((car) => obj[car.name] = car.name)
+      cartypes.cars.map((car) => (obj[car.name] = car.name));
       setCars(obj);
     }
   }, [cartypes.cars]);
-
-  const columns = [
-    { title: languageJson.first_name, field: 'firstName', editable: 'never' },
-    { title: languageJson.last_name, field: 'lastName', editable: 'never' },
-    { title: languageJson.user_type, field: 'usertype', editable: 'never' },
-    { title: languageJson.email, field: 'email', editable: 'never' },
-    { title: languageJson.mobile, field: 'mobile', editable: 'never' },
-    { title: languageJson.profile_image, field: 'profile_image', render: rowData => rowData.profile_image ? <img alt='Profile' src={rowData.profile_image} style={{ width: 50, borderRadius: '50%' }} /> : null, editable: 'never' },
-    { title: languageJson.vehicle_model, field: 'vehicleModel', editable: 'never' },
-    { title: languageJson.vehicle_no, field: 'vehicleNumber', editable: 'never' },
-    { title: languageJson.car_type, field: 'carType', lookup: cars },
-    { title: languageJson.account_approve, field: 'approved', type: 'boolean' },
-    { title: languageJson.driver_active, field: 'driverActiveStatus', type: 'boolean' },
-    { title: languageJson.Cnic_Front_image, field: 'cnicFront', render: rowData => rowData.cnicFront ? <img alt='cnicFront' src={rowData.cnicFront} style={{ width: 100 }} /> : null, editable: 'never' },
-    { title: languageJson.Cnic_Back_image, field: 'cnicBackImage', render: rowData => rowData.cnicBackImage ? <img alt='cnicBackImage' src={rowData.cnicBackImage} style={{ width: 100 }} /> : null, editable: 'never' },
-    { title: languageJson.lisence_image, field: 'licenseImage', render: rowData => rowData.licenseImage ? <img alt='License' src={rowData.licenseImage} style={{ width: 100 }} /> : null, editable: 'never' },
-    { title: languageJson.Papers, field: 'papers', render: rowData => rowData.papers ? <img alt='License' src={rowData.papers} style={{ width: 100 }} /> : null, editable: 'never' },
-    { title: languageJson.Selfie, field: 'selfie', render: rowData => rowData.selfie ? <img alt='selfie' src={rowData.selfie} style={{ width: 100 }} /> : null, editable: 'never' },
-    { title: languageJson.wallet_balance, field: 'walletBalance', type: 'numeric', },
-    { title: languageJson.pending_commition, field: 'pendingCommition', type: 'numeric', },
-    { title: languageJson.signup_via_refferal, field: 'signupViaReferral', type: 'boolean', editable: 'never' },
-    { title: languageJson.refferal_id, field: 'refferalId', editable: 'never' }
-  ];
+  useEffect(() => {
+    if (data.length) {
+      setadminData(data?.filter((item) => item.usertype === "Admin"));
+      setdriverData(data?.filter((item) => item.usertype === "driver"));
+    }
+  }, [data]);
 
   return (
-    usersdata.loading ? <CircularLoading /> :
-      <MaterialTable
-        title={languageJson.all_user}
-        columns={columns}
-        data={data}
-        options={{
-          exportButton: true
-        }}
-        editable={{
-          onRowUpdate: (newData, oldData) =>
-            new Promise(resolve => {
-              setTimeout(() => {
-                resolve();
-                dispatch(editUser(oldData.id, newData));
-              }, 600);
-            }),
+    <>
+      <>
+        <Tabs
+          value={tabvalue}
+          onChange={handleChange}
+          aria-label="simple tabs example"
+        >
+          {data
+            ?.filter(
+              (v, i, a) => a.findIndex((v2) => v2.usertype === v.usertype) === i
+            )
+            ?.map((user, counter) => {
+              return <Tab label={user.usertype} value={user.usertype} />;
+            })}
+        </Tabs>
 
-
-          onRowDelete: oldData =>
-            new Promise(resolve => {
-              setTimeout(() => {
-                resolve();
-                dispatch(deleteUser(oldData.id));
-              }, 600);
-            }),
-        }}
-      />
+        <TabPanel value={tabvalue} index="Admin">
+          {usersdata.loading ? (
+            <CircularLoading />
+          ) : (
+            <Usertable data={adminData} car={cars} />
+          )}
+        </TabPanel>
+        <TabPanel value={tabvalue} index="driver">
+          {usersdata.loading ? (
+            <CircularLoading />
+          ) : (
+            <Usertable data={driverData} car={cars} />
+          )}
+        </TabPanel>
+      </>
+    </>
   );
 }
