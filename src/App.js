@@ -5,7 +5,7 @@ import { store } from "./reducers/store";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Login from "./views/Login";
 import Dashboard from "./views/Dashboard";
-import CarTypes from "./views/CarTypes";
+import CarTypes from "./views/vehicles/index";
 import Bookings from "./views/Bookings";
 import Promos from "./views/Promos";
 import Zones from "./views/Zones";
@@ -17,6 +17,7 @@ import AuthLoading from "./components/AuthLoading";
 import Notifications from "./views/Notifications";
 import DriverEarning from "./views/DriverEarning";
 import Earningreports from "./views/Earningreports";
+import "antd/dist/antd.css";
 function App() {
   store.dispatch(fetchUser());
   return (
@@ -31,10 +32,22 @@ function App() {
             <ProtectedRoute exact component={Zones} path="/zones" />
             <ProtectedRoute exact component={Tariffs} path="/tariffs" />
             <ProtectedRoute exact component={Users} path="/drivers" />
-            <ProtectedRoute exact component={DriverEarning} path="/driverearning" />
+            <ProtectedRoute
+              exact
+              component={DriverEarning}
+              path="/driverearning"
+            />
             <ProtectedRoute exact component={Referral} path="/referral" />
-            <ProtectedRoute exact component={Notifications} path="/notifications" />
-            <ProtectedRoute exact component={Earningreports} path="/earningreports" />
+            <ProtectedRoute
+              exact
+              component={Notifications}
+              path="/notifications"
+            />
+            <ProtectedRoute
+              exact
+              component={Earningreports}
+              path="/earningreports"
+            />
             <Route component={Login} path="/login" />
           </Switch>
         </Router>

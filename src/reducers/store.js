@@ -1,7 +1,6 @@
-
-import { createStore, combineReducers, applyMiddleware } from "redux";
+import { createStore, combineReducers, applyMiddleware, compose } from "redux";
 import thunk from "redux-thunk";
-import logger from 'redux-logger'
+import logger from "redux-logger";
 
 import auth from "./authreducer";
 import cartypes from "./cartypesreducer";
@@ -10,8 +9,8 @@ import promodata from "./promoreducer";
 import usersdata from "./usersreducer";
 import referraldata from "./referralreducer";
 import notificationdata from "./notificationreducer";
-import driverearningdata from './driverearningreducer';
-import Earningreportsdata from './earningreportsreducer'
+import driverearningdata from "./driverearningreducer";
+import Earningreportsdata from "./earningreportsreducer";
 const reducers = combineReducers({
   auth,
   cartypes,
@@ -21,14 +20,20 @@ const reducers = combineReducers({
   referraldata,
   notificationdata,
   driverearningdata,
-  Earningreportsdata
+  Earningreportsdata,
 });
 
 let middleware = [];
-if (process.env.NODE_ENV === 'development') {
+
+const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+
+if (process.env.NODE_ENV === "development") {
   middleware = [...middleware, thunk, logger];
 } else {
   middleware = [...middleware, thunk];
 }
 
-export const store = createStore(reducers, {}, applyMiddleware(...middleware));
+export const store = createStore(
+  reducers,
+  composeEnhancers(applyMiddleware(...middleware))
+);
