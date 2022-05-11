@@ -11,6 +11,7 @@
     "autosuggest-highlight": "^3.2.0",
     "firebase": "^6.3.5",
     "firebase-functions": "^3.7.0",
+    "formik": "^2.2.9",
     "material-table": "^1.50.0",
     "node-sass": "^4.14.1",
     "react": "^16.9.0",
