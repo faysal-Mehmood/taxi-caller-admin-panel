@@ -17,6 +17,7 @@ import AuthLoading from "./components/AuthLoading";
 import Notifications from "./views/Notifications";
 import DriverEarning from "./views/DriverEarning";
 import Earningreports from "./views/Earningreports";
+import "./app.css";
 import "antd/dist/antd.css";
 function App() {
   store.dispatch(fetchUser());

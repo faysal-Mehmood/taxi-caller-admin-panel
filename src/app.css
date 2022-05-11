@@ -1,0 +1,16 @@
+.vehicle-type-container {
+  width: 500px;
+}
+.vehicle-type-container .vehicle-type-area {
+  margin-bottom: 10px;
+}
+.vehicle-type-container .vehicle-type-area .vehicle-type {
+  width: 30%;
+}
+.vehicle-type-container .vehicle-type-area .vehicle-type-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+  padding: 5px 0px;
+}
