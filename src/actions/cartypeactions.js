@@ -1,13 +1,13 @@
-import { carTypesRef, vehicletype, vehicleTagsRef } from '../config/firebase';
+import { vehiclesRef, vehicletype, vehicleTagsRef } from '../config/firebase';
 import {
   FETCH_CAR_TYPES,
   FETCH_CAR_TYPES_SUCCESS,
   FETCH_CAR_TYPES_FAILED,
-  EDIT_CAR_TYPE,
+  EDIT_VEHICLE_TYPE,
   ADD_VEHICLE_TYPE,
   FETCH_VEHICLE_TYPES_SUCCESS,
   FETCH_VEHICLE_TYPES_FAILED,
-  EDIT_VEHICLE_TYPE,
+  EDIT_VEHICLE,
   ADD_VEHICLE_TAGS,
   FETCH_VEHICLE_TAGS_SUCCESS,
   FETCH_VEHICLE_TAGS_FAILED,
@@ -18,7 +18,7 @@ export const fetchCarTypes = () => (dispatch) => {
     type: FETCH_CAR_TYPES,
     payload: null,
   });
-  carTypesRef.on('value', (snapshot) => {
+  vehiclesRef.on('value', (snapshot) => {
     if (snapshot.val()) {
       dispatch({
         type: FETCH_CAR_TYPES_SUCCESS,
@@ -33,12 +33,12 @@ export const fetchCarTypes = () => (dispatch) => {
   });
 };
 
-export const editCarType = (cartypes, method) => (dispatch) => {
+export const editVehicle = (vehiclesdata, method) => (dispatch) => {
   dispatch({
-    type: EDIT_CAR_TYPE,
+    type: EDIT_VEHICLE,
     payload: method,
   });
-  carTypesRef.set(cartypes);
+  vehiclesRef.set(vehiclesdata);
 };
 
 //add vehicle type

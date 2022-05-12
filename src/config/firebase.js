@@ -11,9 +11,9 @@ export const authRef = firebase.auth();
 export const FIREBASE_AUTH_PERSIST = firebase.auth.Auth.Persistence.LOCAL;
 
 export const bookingRef = databaseRef.child('bookings');
-export const carTypesRef = databaseRef.child('rates/car_type');
-export const vehicletype = databaseRef.child('vehicletypes');
-export const vehicleTagsRef = databaseRef.child('vehicleTags');
+export const vehiclesRef = databaseRef.child('rates/car_type');
+export const vehicletype = databaseRef.child('rates/vehicletypes');
+export const vehicleTagsRef = databaseRef.child('rates/vehicleTags');
 export const promoRef = databaseRef.child('offers');
 export const promoEditRef = (id) => databaseRef.child('offers/' + id);
 export const userRef = databaseRef.child('users');
