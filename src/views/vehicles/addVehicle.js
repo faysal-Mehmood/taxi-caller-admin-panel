@@ -247,7 +247,7 @@ const AddVehicle = () => {
                 <Button variant="contained" onClick={() => setIsModalVisible(false)}>
                   Cancel
                 </Button>
-                <Button variant="contained" color="primary" type={isSubmitting}>
+                <Button variant="contained" color="primary" type="submit" disabled={isSubmitting}>
                   Submit
                 </Button>
               </div>
