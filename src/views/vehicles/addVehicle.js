@@ -1,19 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Modal } from 'antd';
-import {
-  TextField,
-  Button,
-  Select,
-  MenuItem,
-  InputLabel,
-} from '@material-ui/core';
+import { TextField, Button, Select, MenuItem } from '@material-ui/core';
 import { Formik } from 'formik';
 import { addVehicle } from '../../actions/cartypeactions';
 
 const AddVehicle = () => {
   const dispatch = useDispatch();
   const cartypes = useSelector((state) => state.cartypes);
+  const [vehicledata, setvehicledata] = useState([]);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [vehicleTypes, setvehicleTypes] = useState([]);
   const [vehicleTags, setvehicleTags] = useState([]);
@@ -39,7 +34,11 @@ const AddVehicle = () => {
       setvehicleTypes(cartypes?.vehicleType);
     }
   }, [cartypes?.vehicleTags, cartypes?.vehicleType]);
-
+  useEffect(() => {
+    if (cartypes?.cars) {
+      setvehicledata(cartypes?.cars);
+    }
+  }, [cartypes?.cars]);
   return (
     <>
       <Button variant='contained' color='primary' onClick={showModal}>
@@ -49,11 +48,10 @@ const AddVehicle = () => {
         title='Add a New Vehicle'
         visible={isModalVisible}
         //onOk={this.handleOk}
-        // onCancel={this.handleCancel}
+        onCancel={handleCancel}
         footer={null}
-        // width={700}
+        height={700}
       >
-        {' '}
         <Formik
           initialValues={{
             name: '',
@@ -65,6 +63,8 @@ const AddVehicle = () => {
             personSeats: '',
             busiClass: '',
             wheelChair: '',
+            vehicleType: SelectedVehicle,
+            vehicleTags: selectedTags,
           }}
           validate={(values) => {
             const errors = {};
@@ -99,7 +99,8 @@ const AddVehicle = () => {
             return errors;
           }}
           onSubmit={(values) => {
-            dispatch(addVehicle([values]));
+            console.log('dati', vehicledata);
+            dispatch(addVehicle(vehicledata));
             setIsModalVisible(false);
           }}
         >
@@ -129,6 +130,7 @@ const AddVehicle = () => {
 
               <TextField
                 margin='dense'
+                type='number'
                 id='convenience_fees'
                 name='convenience_fees'
                 label='Conenience fees'
@@ -142,6 +144,7 @@ const AddVehicle = () => {
               <TextField
                 id='min_fare'
                 margin='dense'
+                type='number'
                 name='min_fare'
                 label='Minimum fare'
                 value={values.min_fare}
@@ -153,6 +156,7 @@ const AddVehicle = () => {
               <TextField
                 id='rate_per_kilometer'
                 margin='dense'
+                type='number'
                 name='rate_per_kilometer'
                 label='Rate per kilo-meter'
                 value={values.rate_per_kilometer}
@@ -169,6 +173,7 @@ const AddVehicle = () => {
                 type='number'
                 id='rate_per_hour'
                 margin='dense'
+                type='number'
                 name='rate_per_hour'
                 label='Rate per hour'
                 value={values.rate_per_hour}
@@ -193,6 +198,7 @@ const AddVehicle = () => {
                 id='personSeats'
                 name='personSeats'
                 margin='dense'
+                type='number'
                 label='People can be Sit'
                 value={values.personSeats}
                 onChange={handleChange}
@@ -203,6 +209,7 @@ const AddVehicle = () => {
               <TextField
                 id='busiClass'
                 name='busiClass'
+                type='number'
                 margin='dense'
                 label='Business Class Seats'
                 value={values.busiClass}
@@ -212,35 +219,34 @@ const AddVehicle = () => {
                 style={{ marginRight: '20px' }}
               />
 
-              <TextField
-                id='wheelChair'
-                name='wheelChair'
-                margin='dense'
-                label='Wheel Chair can be place'
-                value={values.wheelChair}
-                onChange={handleChange}
-                error={touched.busiClass && Boolean(errors.wheelChair)}
-                helperText={touched.wheelChair && errors.wheelChair}
-                style={{ marginRight: '20px' }}
-              />
               <Select
+                name='vehicleType'
                 style={{ marginRight: '20px' }}
                 labelId='demo-simple-select-label'
                 id='demo-simple-select'
                 value={SelectedVehicle}
-                onChange={(e) => setSelectedVehicle(e.target.value)}
+                onChange={(e) => {
+                  setSelectedVehicle(e.target.value);
+                }}
               >
                 <MenuItem value='none'> Select Your Vehicle Type</MenuItem>
-                {vehicleTypes?.map((vehicle, counter) => {
-                  return (
-                    <MenuItem key={counter} value={vehicle.name}>
-                      {vehicle.name}
-                    </MenuItem>
-                  );
-                })}
+                {vehicleTypes.length > 0 ? (
+                  vehicleTypes?.map((vehicle, counter) => {
+                    return (
+                      <MenuItem key={counter} value={vehicle.name}>
+                        {vehicle.name}
+                      </MenuItem>
+                    );
+                  })
+                ) : (
+                  <MenuItem value='disabled'>
+                    Vehicle type not Available{' '}
+                  </MenuItem>
+                )}
               </Select>
 
               <Select
+                name='vehicleTags'
                 style={{ marginTop: '20px' }}
                 labelId='demo-simple-select-label'
                 id='demo-simple-select'
@@ -248,22 +254,46 @@ const AddVehicle = () => {
                 onChange={(e) => setselectedTags(e.target.value)}
               >
                 <MenuItem value='none'> Select Your Vehicle Tags </MenuItem>
-                {vehicleTags?.map((tagger, counter) => {
-                  return (
-                    <MenuItem key={counter} value={tagger.name}>
-                      {tagger.name}
-                    </MenuItem>
-                  );
-                })}
+                {vehicleTags.length > 0 ? (
+                  vehicleTags?.map((tagger, counter) => {
+                    return (
+                      <MenuItem key={counter} value={tagger.tagName}>
+                        {tagger.tagName}
+                      </MenuItem>
+                    );
+                  })
+                ) : (
+                  <MenuItem disabled value='disabled'>
+                    Vehicle tags not Available
+                  </MenuItem>
+                )}
               </Select>
+              <TextField
+                id='wheelChair'
+                name='wheelChair'
+                type='number'
+                margin='dense'
+                label='No of wheel chairs allowed'
+                value={values.wheelChair}
+                onChange={handleChange}
+                error={touched.busiClass && Boolean(errors.wheelChair)}
+                helperText={touched.wheelChair && errors.wheelChair}
+                style={{ marginRight: '20px', marginTop: '10px' }}
+              />
               <div style={{ textAlign: 'center', marginTop: '20px' }}>
                 <Button
                   variant='contained'
                   onClick={() => setIsModalVisible(false)}
+                  style={{ marginRight: '10px' }}
                 >
                   Cancel
                 </Button>
-                <Button variant='contained' color='primary' type='submit'>
+                <Button
+                  variant='contained'
+                  color='primary'
+                  onClick={() => setvehicledata([...vehicledata, values])}
+                  type='submit'
+                >
                   Submit
                 </Button>
               </div>

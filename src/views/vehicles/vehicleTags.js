@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Button, Input, Select } from 'antd';
 import uuid from 'react-uuid';
 import { useDispatch, useSelector } from 'react-redux';
-import { addVehicleTag, editVehicleType } from '../../actions/cartypeactions';
+import { editVehicleTags } from '../../actions/cartypeactions';
 const { Option } = Select;
 
 const VehicleTags = () => {
@@ -43,29 +43,19 @@ const VehicleTags = () => {
                   type='checkbox'
                   name={vehicle.tagName}
                   checked={vehicle.enabled}
-                  // onChange={(e) => {
-                  //   const vehicleTypeIndex = vehicleTypes?.filter(
-                  //     (vehicle1) => vehicle1.id === vehicle.id
-                  //   );
+                  onChange={(e) => {
+                    const vehicleTagIndex = vehicleTags?.filter(
+                      (vehicle1) => vehicle1.id === vehicle.id
+                    );
 
-                  //   if (e.target.checked) {
-                  //     vehicleTypeIndex.enabled = true;
-                  //     dispatch(
-                  //       editVehicleType([
-                  //         ...newVehicleType,
-                  //         ...vehicleTypeIndex,
-                  //       ])
-                  //     );
-                  //   } else {
-                  //     vehicleTypeIndex.enabled = false;
-                  //     dispatch(
-                  //       editVehicleType([
-                  //         ...newVehicleType,
-                  //         ...vehicleTypeIndex,
-                  //       ])
-                  //     );
-                  //   }
-                  // }}
+                    if (e.target.checked) {
+                      vehicleTagIndex && (vehicleTagIndex[0].enabled = true);
+                    } else {
+                      vehicleTagIndex && (vehicleTagIndex[0].enabled = false);
+                    }
+                    setnewVehicleTag([...newVehicleTag, vehicleTagIndex[0]]);
+                    dispatch(editVehicleTags(newVehicleTag));
+                  }}
                 />
                 <label>Enabled</label>
               </div>
@@ -75,7 +65,6 @@ const VehicleTags = () => {
         {/* {cartypes?.error?.flag && <p>{cartypes?.error?.msg}</p>} */}
       </div>
       <Select
-        showSearch
         style={{ marginRight: '10px' }}
         placeholder='Select a New Tag'
         optionFilterProp='children'
@@ -94,7 +83,7 @@ const VehicleTags = () => {
           }
         }}
       >
-        <Option value='Comfortable'>comfortable</Option>
+        <Option value='Comfortable'>Comfortable</Option>
         <Option value='Pet-friendly'>Pet friendly</Option>
         <Option value='No-smoking'>No Smoking</Option>
       </Select>
@@ -103,7 +92,7 @@ const VehicleTags = () => {
         className=''
         onClick={() => {
           if (newVehicleTag) {
-            dispatch(addVehicleTag(newVehicleTag));
+            dispatch(editVehicleTags(newVehicleTag));
           }
         }}
       >

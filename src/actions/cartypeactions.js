@@ -4,11 +4,10 @@ import {
   FETCH_CAR_TYPES_SUCCESS,
   FETCH_CAR_TYPES_FAILED,
   EDIT_VEHICLE_TYPE,
-  ADD_VEHICLE_TYPE,
   FETCH_VEHICLE_TYPES_SUCCESS,
   FETCH_VEHICLE_TYPES_FAILED,
   ADD_VEHICLE,
-  ADD_VEHICLE_TAGS,
+  EDIT_VEHICLE_TAGS,
   FETCH_VEHICLE_TAGS_SUCCESS,
   FETCH_VEHICLE_TAGS_FAILED,
 } from './types';
@@ -41,14 +40,6 @@ export const addVehicle = (vehiclesdata) => (dispatch) => {
   vehiclesRef.set(vehiclesdata);
 };
 
-//add vehicle type
-export const addVehicleType = (cartype) => (dispatch) => {
-  dispatch({
-    type: ADD_VEHICLE_TYPE,
-    payload: cartype,
-  });
-  vehicletype.set(cartype);
-};
 //fetch vehicle type
 export const fetchVehicleTypes = () => (dispatch) => {
   dispatch({
@@ -64,7 +55,7 @@ export const fetchVehicleTypes = () => (dispatch) => {
     } else {
       dispatch({
         type: FETCH_VEHICLE_TYPES_FAILED,
-        payload: 'No vehic type available available.',
+        payload: 'No vehicle type available available.',
       });
     }
   });
@@ -78,9 +69,9 @@ export const editVehicleType = (cartype) => (dispatch) => {
   vehicletype.set(cartype);
 };
 //add vehicle tag
-export const addVehicleTag = (cartag) => (dispatch) => {
+export const editVehicleTags = (cartag) => (dispatch) => {
   dispatch({
-    type: ADD_VEHICLE_TAGS,
+    type: EDIT_VEHICLE_TAGS,
     payload: cartag,
   });
   vehicleTagsRef.set(cartag);

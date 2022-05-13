@@ -7,7 +7,7 @@ import {
   FETCH_VEHICLE_TYPES_FAILED,
   FETCH_VEHICLE_TYPES_SUCCESS,
   EDIT_VEHICLE_TYPE,
-  ADD_VEHICLE_TAGS,
+  EDIT_VEHICLE_TAGS,
   FETCH_VEHICLE_TAGS_SUCCESS,
   FETCH_VEHICLE_TAGS_FAILED,
 } from '../actions/types';
@@ -39,7 +39,7 @@ export default (state = INITIAL_STATE, action) => {
     case FETCH_CAR_TYPES_FAILED:
       return {
         ...state,
-        cars: null,
+        cars: [],
         loading: false,
         error: {
           flag: true,
@@ -74,8 +74,11 @@ export default (state = INITIAL_STATE, action) => {
         cars: [...state.cars, action.payload],
       };
     case EDIT_VEHICLE_TYPE:
-      return state;
-    case ADD_VEHICLE_TAGS:
+      return {
+        ...state,
+        vehicleType: action.payload,
+      };
+    case EDIT_VEHICLE_TAGS:
       return {
         ...state,
         vehicleTags: action.payload,
