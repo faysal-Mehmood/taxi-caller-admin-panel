@@ -10,11 +10,7 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace;
 }
 
-.zone-input input {
-  padding: 7.4px 4px;
-}
-
-.zone-input .MuiSelect-select {
+.zone-input {
   padding: 7.4px 4px;
   width: 176px;
 }

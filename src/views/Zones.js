@@ -1,18 +1,12 @@
 import React, { useState, useEffect } from "react";
-import {
-  Checkbox,
-  Box,
-  Typography,
-  Button,
-  MenuItem,
-  TextField,
-  FormControlLabel,
-  FormGroup,
-  Paper,
-} from "@material-ui/core";
+import { useDispatch, useSelector } from "react-redux";
+import { Box, Typography, Paper, Button, TextField, MenuItem } from "@material-ui/core";
+import { Formik, Field } from "formik";
 import languageJson from "../config/language";
-import CloseIcon from "@material-ui/icons/Close";
+// import CloseIcon from "@material-ui/icons/Close";
 import Map from "../components/Map";
+
+import { fetchZone } from "../actions/zoneaction";
 
 const search = [
   { id: "1", name: "Kapteeninkatu" },
@@ -36,66 +30,46 @@ const currencies = [
     label: "Unrestricted",
   },
   {
-    value: "Only zone chain",
+    value: "Only-zone-chain",
     label: "Only zone chain",
   },
   {
-    value: "500 m",
+    value: "500-m",
     label: "500 m",
   },
   {
-    value: "1 KM",
+    value: "1-KM",
     label: "1 KM",
   },
   {
-    value: "1.5 KM",
+    value: "1.5-KM",
     label: "1.5 KM",
   },
   {
-    value: "2 KM",
+    value: "2-KM",
     label: "2 KM",
   },
   {
-    value: "3 KM",
+    value: "3-KM",
     label: "3 KM",
   },
   {
-    value: "5 KM",
+    value: "5-KM",
     label: "5 KM",
   },
   {
-    value: "10 KM",
+    value: "10-KM",
     label: "10 KM",
   },
   {
-    value: "15 KM",
+    value: "15-KM",
     label: "15 KM",
-  },
-  {
-    value: "20 KM",
-    label: "20 KM",
-  },
-  {
-    value: "30 KM",
-    label: "30 KM",
-  },
-  {
-    value: "40 KM",
-    label: "40 KM",
-  },
-  {
-    value: "50 KM",
-    label: "50 KM",
   },
 ];
 const Zones = () => {
-  const [currency, setCurrency] = useState("Unrestricted");
   const [mylocation, setMylocation] = useState(null);
   const [locations, setLocations] = useState([]);
-
-  const handleChange = (event) => {
-    setCurrency(event.target.value);
-  };
+  const dispatch = useDispatch();
 
   useEffect(() => {
     if (mylocation == null) {
@@ -140,7 +114,7 @@ const Zones = () => {
       </Box>
       <Box display="flex">
         <Box display="flex" mt="25px">
-          <Box>
+          {/* <Box>
             <TextField
               id="standard-basic"
               label={languageJson.zone_search_text}
@@ -162,130 +136,186 @@ const Zones = () => {
                 );
               })}
             </Box>
-          </Box>
-          <Box px="20px" width="300px" height="480px" style={{ overflowY: "scroll" }}>
-            <Box display="flex" alignItems="center" justifyContent="space-between" mb="25px">
-              <Typography variant="p" style={{ marginRight: "40px" }}>
-                ID
-              </Typography>
-              <TextField
-                id="outlined-number"
-                type="number"
-                variant="outlined"
-                className="zone-input"
-              />
-            </Box>
-            <Box display="flex" alignItems="center" justifyContent="space-between" mb="25px">
-              <Typography variant="p" style={{ marginRight: "20px" }}>
-                Code
-              </Typography>
-              <TextField
-                id="outlined-number"
-                type="text"
-                variant="outlined"
-                className="zone-input"
-              />
-            </Box>
-            <Box display="flex" alignItems="center" justifyContent="space-between" mb="25px">
-              <Typography variant="p" style={{ marginRight: "20px" }}>
-                Name
-              </Typography>
-              <TextField
-                id="outlined-number"
-                type="text"
-                variant="outlined"
-                className="zone-input"
-              />
-            </Box>
-
-            <Typography variant="h6" style={{ marginTop: "25px" }}>
-              ADVANCED
-            </Typography>
-
-            <Typography variant="h6" style={{ marginTop: "10px" }}>
-              Require password enter flight
-            </Typography>
-
-            <FormGroup>
-              <FormControlLabel control={<Checkbox />} label="pick-up" />
-            </FormGroup>
-
-            <Typography variant="p" style={{ marginTop: "25px" }}>
-              Set assignment
-            </Typography>
-
-            <Box
-              display="flex"
-              alignItems="center"
-              justifyContent="space-between"
-              mb="30px"
-              mt="20px"
-            >
-              <Typography variant="p" style={{ marginRight: "20px" }}>
-                Search
-              </Typography>
-              <TextField
-                id="outlined-select-currency"
-                variant="outlined"
-                select
-                value={currency}
-                onChange={handleChange}
-                className="zone-input"
-              >
-                {currencies.map((option) => (
-                  <MenuItem key={option.value} value={option.value}>
-                    {option.label}
-                  </MenuItem>
-                ))}
-              </TextField>
-            </Box>
-
-            <Typography variant="p" style={{ marginTop: "25px" }}>
-              Assign from zones in this order
-            </Typography>
-
-            <Box
-              display="flex"
-              alignItems="center"
-              justifyContent="space-between"
-              mb="10px"
-              mt="20px"
-            >
-              <Typography variant="p" style={{ marginRight: "20px" }}>
-                1.
-              </Typography>
-              <TextField
-                id="outlined-select-currency"
-                variant="outlined"
-                select
-                value={currency}
-                onChange={handleChange}
-                className="zone-input"
-              >
-                {currencies.map((option) => (
-                  <MenuItem key={option.value} value={option.value}>
-                    {option.label}
-                  </MenuItem>
-                ))}
-              </TextField>
-            </Box>
-
-            <FormGroup>
-              <FormControlLabel control={<Checkbox />} label="Is taxi rank" />
-            </FormGroup>
-
-            <Button
-              variant="contained"
-              style={{
-                backgroundColor: "rgb(253, 217, 67)",
-                color: "#000",
-                borderRadius: "23px",
-                marginRight: "5px",
-                marginTop: "15px",
+            </Box>*/}
+          <Box px="20px" width="400px" height="480px" style={{ overflowY: "scroll" }}>
+            <Formik
+              initialValues={{ id: "", code: "", name: "", selectOne: "", selectTwo: "" }}
+              validate={(values) => {
+                const errors = {};
+                if (!values.id) {
+                  errors.id = "Required";
+                }
+                if (!values.code) {
+                  errors.code = "Required";
+                }
+                return errors;
+              }}
+              onSubmit={(values, { setSubmitting }) => {
+                dispatch(fetchZone(values));
+                setTimeout(() => {
+                  alert(JSON.stringify(values, null, 2));
+                  setSubmitting(false);
+                }, 400);
               }}
             >
-              DONE
-            </Button>
+              {({
+                values,
+                errors,
+                touched,
+                handleChange,
+                handleBlur,
+                handleSubmit,
+                isSubmitting,
+                /* and other goodies */
+              }) => (
+                <form onSubmit={handleSubmit}>
+                  <Box display="flex" alignItems="center" justifyContent="space-between" mb="25px">
+                    <Typography variant="p" style={{ marginRight: "40px" }}>
+                      ID
+                    </Typography>
+                    <input
+                      className="zone-input"
+                      type="id"
+                      name="id"
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      value={values.id}
+                    />
+                  </Box>
+                  {errors.id && touched.id && errors.id}
+
+                  <Box display="flex" alignItems="center" justifyContent="space-between" mb="25px">
+                    <Typography variant="p" style={{ marginRight: "40px" }}>
+                      Code
+                    </Typography>
+                    <input
+                      className="zone-input"
+                      type="code"
+                      name="code"
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      value={values.code}
+                    />
+                  </Box>
+                  {errors.code && touched.code && errors.code}
+                  <Box display="flex" alignItems="center" justifyContent="space-between" mb="25px">
+                    <Typography variant="p" style={{ marginRight: "40px" }}>
+                      Name
+                    </Typography>
+                    <input
+                      className="zone-input"
+                      type="name"
+                      name="name"
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      value={values.name}
+                    />
+                  </Box>
+                  {errors.name && touched.name && errors.name}
+
+                  <Typography variant="h6" style={{ marginTop: "25px" }}>
+                    ADVANCED
+                  </Typography>
+
+                  <Typography variant="h6" style={{ marginTop: "10px" }}>
+                    Require password enter flight
+                  </Typography>
+
+                  <Box display="flex" alignItems="center" mb="25px">
+                    <Field type="checkbox" name="checked" value="pick-up" />
+                    <Typography variant="p" style={{ marginRight: "20px" }}>
+                      pick-up
+                    </Typography>
+                  </Box>
+
+                  <Typography variant="p" style={{ marginTop: "25px" }}>
+                    Set assignment
+                  </Typography>
+                  <Box
+                    display="flex"
+                    alignItems="center"
+                    justifyContent="space-between"
+                    mb="30px"
+                    mt="20px"
+                  >
+                    <Typography variant="p" style={{ marginRight: "20px" }}>
+                      Search
+                    </Typography>
+
+                    <TextField
+                      id="outlined-select-currency"
+                      variant="outlined"
+                      select
+                      name="selectOne"
+                      value={values.selectOne}
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      className="zone-input"
+                    >
+                      {currencies.map((option) => (
+                        <MenuItem key={option.value} value={option.value}>
+                          {option.label}
+                        </MenuItem>
+                      ))}
+                    </TextField>
+                  </Box>
+
+                  <Typography variant="p" style={{ marginTop: "25px" }}>
+                    Assign from zones in this order
+                  </Typography>
+
+                  <Box
+                    display="flex"
+                    alignItems="center"
+                    justifyContent="space-between"
+                    mb="10px"
+                    mt="20px"
+                  >
+                    <Typography variant="p" style={{ marginRight: "20px" }}>
+                      1.
+                    </Typography>
+
+                    <TextField
+                      id="outlined-select-currency"
+                      variant="outlined"
+                      select
+                      name="selectTwo"
+                      value={values.selectTwo}
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      className="zone-input"
+                    >
+                      {currencies.map((option) => (
+                        <MenuItem key={option.value} value={option.value}>
+                          {option.label}
+                        </MenuItem>
+                      ))}
+                    </TextField>
+                  </Box>
+
+                  <Box display="flex" alignItems="center" mb="25px">
+                    <Field type="checkbox" name="checked" value="Is taxi rank" />
+                    <Typography variant="p" style={{ marginRight: "20px" }}>
+                      Is taxi rank
+                    </Typography>
+                  </Box>
+
+                  <button
+                    type="submit"
+                    disabled={isSubmitting}
+                    style={{
+                      backgroundColor: "rgb(253, 217, 67)",
+                      color: "#000",
+                      borderRadius: "23px",
+                      marginRight: "5px",
+                      marginTop: "15px",
+                    }}
+                  >
+                    DONE
+                  </button>
+                </form>
+              )}
+            </Formik>
           </Box>
         </Box>
         {mylocation ? (
