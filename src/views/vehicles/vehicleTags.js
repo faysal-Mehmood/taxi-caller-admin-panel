@@ -20,27 +20,27 @@ const VehicleTags = () => {
     console.log('search:', val);
   }
   useEffect(() => {
-    if (cartypes?.vehicleType) {
+    if (cartypes?.vehicleTags) {
       setvehicleTags(cartypes?.vehicleTags);
       setnewVehicleTag(cartypes?.vehicleTags);
     }
   }, [cartypes?.vehicleTags]);
   console.log('tags', cartypes);
   return (
-    <div className="vehicle-type-container">
-      <div className="vehicle-type-area">
+    <div className='vehicle-type-container'>
+      <div className='vehicle-type-area'>
         {vehicleTags?.map((vehicle, counter) => {
           return (
-            <div className="vehicle-type-content" key={counter}>
+            <div className='vehicle-type-content' key={counter}>
               <Input
-                className="vehicle-type"
+                className='vehicle-type'
                 name={vehicle.tagName}
                 value={vehicle.tagName}
                 readOnly
               />
-              <div className="vehicle-enable-checkbox">
+              <div className='vehicle-enable-checkbox'>
                 <input
-                  type="checkbox"
+                  type='checkbox'
                   name={vehicle.tagName}
                   checked={vehicle.enabled}
                   // onChange={(e) => {
@@ -77,8 +77,8 @@ const VehicleTags = () => {
       <Select
         showSearch
         style={{ marginRight: '10px' }}
-        placeholder="Select a New Tag"
-        optionFilterProp="children"
+        placeholder='Select a New Tag'
+        optionFilterProp='children'
         onChange={onChange}
         onSearch={onSearch}
         filterOption={(input, option) =>
@@ -94,13 +94,13 @@ const VehicleTags = () => {
           }
         }}
       >
-        <Option value="Comfortable">comfortable</Option>
-        <Option value="Pet-friendly">Pet friendly</Option>
-        <Option value="No-smoking">No Smoking</Option>
+        <Option value='Comfortable'>comfortable</Option>
+        <Option value='Pet-friendly'>Pet friendly</Option>
+        <Option value='No-smoking'>No Smoking</Option>
       </Select>
       <Button
-        type="primary"
-        className=""
+        type='primary'
+        className=''
         onClick={() => {
           if (newVehicleTag) {
             dispatch(addVehicleTag(newVehicleTag));

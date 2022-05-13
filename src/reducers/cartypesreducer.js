@@ -2,7 +2,7 @@ import {
   FETCH_CAR_TYPES,
   FETCH_CAR_TYPES_SUCCESS,
   FETCH_CAR_TYPES_FAILED,
-  EDIT_VEHICLE,
+  ADD_VEHICLE,
   ADD_VEHICLE_TYPE,
   FETCH_VEHICLE_TYPES_FAILED,
   FETCH_VEHICLE_TYPES_SUCCESS,
@@ -68,8 +68,11 @@ export default (state = INITIAL_STATE, action) => {
           msg: action.payload,
         },
       };
-    case EDIT_VEHICLE:
-      return state;
+    case ADD_VEHICLE:
+      return {
+        ...state,
+        cars: [...state.cars, action.payload],
+      };
     case EDIT_VEHICLE_TYPE:
       return state;
     case ADD_VEHICLE_TAGS:

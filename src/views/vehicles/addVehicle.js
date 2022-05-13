@@ -1,13 +1,24 @@
-import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
+import React, { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Modal } from 'antd';
-import { TextField, Button } from '@material-ui/core';
+import {
+  TextField,
+  Button,
+  Select,
+  MenuItem,
+  InputLabel,
+} from '@material-ui/core';
 import { Formik } from 'formik';
-import { editVehicle } from '../../actions/cartypeactions';
+import { addVehicle } from '../../actions/cartypeactions';
 
 const AddVehicle = () => {
   const dispatch = useDispatch();
+  const cartypes = useSelector((state) => state.cartypes);
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [vehicleTypes, setvehicleTypes] = useState([]);
+  const [vehicleTags, setvehicleTags] = useState([]);
+  const [SelectedVehicle, setSelectedVehicle] = useState('none');
+  const [selectedTags, setselectedTags] = useState('none');
 
   const showModal = () => {
     setIsModalVisible(true);
@@ -20,6 +31,15 @@ const AddVehicle = () => {
   const handleCancel = () => {
     setIsModalVisible(false);
   };
+  useEffect(() => {
+    if (cartypes?.vehicleTags) {
+      setvehicleTags(cartypes?.vehicleTags);
+    }
+    if (cartypes?.vehicleType) {
+      setvehicleTypes(cartypes?.vehicleType);
+    }
+  }, [cartypes?.vehicleTags, cartypes?.vehicleType]);
+
   return (
     <>
       <Button variant='contained' color='primary' onClick={showModal}>
@@ -29,8 +49,9 @@ const AddVehicle = () => {
         title='Add a New Vehicle'
         visible={isModalVisible}
         //onOk={this.handleOk}
-        //onCancel={this.handleCancel}
+        // onCancel={this.handleCancel}
         footer={null}
+        // width={700}
       >
         {' '}
         <Formik
@@ -41,6 +62,9 @@ const AddVehicle = () => {
             rate_per_hour: '',
             rate_per_kilometer: '',
             image: '',
+            personSeats: '',
+            busiClass: '',
+            wheelChair: '',
           }}
           validate={(values) => {
             const errors = {};
@@ -62,10 +86,20 @@ const AddVehicle = () => {
             if (!values.image) {
               errors.image = 'required';
             }
+            if (!values.busiClass) {
+              errors.busiClass = 'required';
+            }
+            if (!values.personSeats) {
+              errors.personSeats = 'required';
+            }
+            if (!values.wheelChair) {
+              errors.wheelChair = 'required';
+            }
+
             return errors;
           }}
           onSubmit={(values) => {
-            dispatch(editVehicle([values]));
+            dispatch(addVehicle([values]));
             setIsModalVisible(false);
           }}
         >
@@ -82,7 +116,6 @@ const AddVehicle = () => {
           }) => (
             <form onSubmit={handleSubmit}>
               <TextField
-                fullWidth
                 id='name'
                 margin='dense'
                 name='name'
@@ -91,10 +124,10 @@ const AddVehicle = () => {
                 onChange={handleChange}
                 error={touched.name && Boolean(errors.name)}
                 helperText={touched.name && errors.name}
+                style={{ marginRight: '20px' }}
               />
 
               <TextField
-                fullWidth
                 margin='dense'
                 id='convenience_fees'
                 name='convenience_fees'
@@ -107,7 +140,6 @@ const AddVehicle = () => {
                 helperText={touched.convenience_fees && errors.convenience_fees}
               />
               <TextField
-                fullWidth
                 id='min_fare'
                 margin='dense'
                 name='min_fare'
@@ -116,9 +148,9 @@ const AddVehicle = () => {
                 onChange={handleChange}
                 error={touched.min_fare && Boolean(errors.min_fare)}
                 helperText={touched.min_fare && errors.min_fare}
+                style={{ marginRight: '20px' }}
               />
               <TextField
-                fullWidth
                 id='rate_per_kilometer'
                 margin='dense'
                 name='rate_per_kilometer'
@@ -134,7 +166,6 @@ const AddVehicle = () => {
                 }
               />
               <TextField
-                fullWidth
                 type='number'
                 id='rate_per_hour'
                 margin='dense'
@@ -144,9 +175,9 @@ const AddVehicle = () => {
                 onChange={handleChange}
                 error={touched.rate_per_hour && Boolean(errors.rate_per_hour)}
                 helperText={touched.rate_per_hour && errors.rate_per_hour}
+                style={{ marginRight: '20px' }}
               />
               <TextField
-                fullWidth
                 id='image'
                 name='image'
                 margin='dense'
@@ -155,12 +186,80 @@ const AddVehicle = () => {
                 onChange={handleChange}
                 error={touched.image && Boolean(errors.image)}
                 helperText={touched.image && errors.image}
+                style={{ marginRight: '20px' }}
               />
+
+              <TextField
+                id='personSeats'
+                name='personSeats'
+                margin='dense'
+                label='People can be Sit'
+                value={values.personSeats}
+                onChange={handleChange}
+                error={touched.personSeats && Boolean(errors.personSeats)}
+                helperText={touched.personSeats && errors.personSeats}
+                style={{ marginRight: '20px' }}
+              />
+              <TextField
+                id='busiClass'
+                name='busiClass'
+                margin='dense'
+                label='Business Class Seats'
+                value={values.busiClass}
+                onChange={handleChange}
+                error={touched.busiClass && Boolean(errors.busiClass)}
+                helperText={touched.busiClass && errors.busiClass}
+                style={{ marginRight: '20px' }}
+              />
+
+              <TextField
+                id='wheelChair'
+                name='wheelChair'
+                margin='dense'
+                label='Wheel Chair can be place'
+                value={values.wheelChair}
+                onChange={handleChange}
+                error={touched.busiClass && Boolean(errors.wheelChair)}
+                helperText={touched.wheelChair && errors.wheelChair}
+                style={{ marginRight: '20px' }}
+              />
+              <Select
+                style={{ marginRight: '20px' }}
+                labelId='demo-simple-select-label'
+                id='demo-simple-select'
+                value={SelectedVehicle}
+                onChange={(e) => setSelectedVehicle(e.target.value)}
+              >
+                <MenuItem value='none'> Select Your Vehicle Type</MenuItem>
+                {vehicleTypes?.map((vehicle, counter) => {
+                  return (
+                    <MenuItem key={counter} value={vehicle.name}>
+                      {vehicle.name}
+                    </MenuItem>
+                  );
+                })}
+              </Select>
+
+              <Select
+                style={{ marginTop: '20px' }}
+                labelId='demo-simple-select-label'
+                id='demo-simple-select'
+                value={selectedTags}
+                onChange={(e) => setselectedTags(e.target.value)}
+              >
+                <MenuItem value='none'> Select Your Vehicle Tags </MenuItem>
+                {vehicleTags?.map((tagger, counter) => {
+                  return (
+                    <MenuItem key={counter} value={tagger.name}>
+                      {tagger.name}
+                    </MenuItem>
+                  );
+                })}
+              </Select>
               <div style={{ textAlign: 'center', marginTop: '20px' }}>
                 <Button
                   variant='contained'
                   onClick={() => setIsModalVisible(false)}
-                  style={{ marginRight: '10px' }}
                 >
                   Cancel
                 </Button>
