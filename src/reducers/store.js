@@ -11,6 +11,7 @@ import referraldata from "./referralreducer";
 import notificationdata from "./notificationreducer";
 import driverearningdata from "./driverearningreducer";
 import Earningreportsdata from "./earningreportsreducer";
+import Zones from "./zonereduces";
 const reducers = combineReducers({
   auth,
   cartypes,
@@ -21,6 +22,7 @@ const reducers = combineReducers({
   notificationdata,
   driverearningdata,
   Earningreportsdata,
+  Zones,
 });
 
 let middleware = [];
@@ -33,7 +35,4 @@ if (process.env.NODE_ENV === "development") {
   middleware = [...middleware, thunk];
 }
 
-export const store = createStore(
-  reducers,
-  composeEnhancers(applyMiddleware(...middleware))
-);
+export const store = createStore(reducers, composeEnhancers(applyMiddleware(...middleware)));
