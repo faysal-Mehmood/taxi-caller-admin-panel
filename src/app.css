@@ -7,6 +7,11 @@
 .vehicle-type-container .vehicle-type-area .vehicle-type {
   width: 30%;
 }
+
+.vehicle-enable-checkbox .del-icon {
+  margin-left: 40px;
+  cursor: pointer;
+}
 .vehicle-type-container .vehicle-type-area .vehicle-type-content {
   display: flex;
   justify-content: space-between;
@@ -23,4 +28,43 @@
   width: 202px;
   margin-top: 26px;
   color: rgba(0, 0, 0, 0.54);
+}
+.ant-table
+  .ant-table-content
+  .ant-table-tbody
+  .expanded-row-container
+  .expanded-col-content {
+  display: flex;
+}
+.ant-table
+  .ant-table-content
+  .ant-table-tbody
+  .expanded-row-container
+  .expanded-col-content
+  .expanded-col
+  .col {
+  display: flex;
+  width: 200px;
+  justify-content: space-between;
+  border-bottom: 1px solid #f0f0f0;
+  padding-top: 8px;
+}
+.ant-table
+  .ant-table-content
+  .ant-table-tbody
+  .expanded-row-container
+  .expanded-col-content
+  .expanded-col {
+  margin-right: 60px;
+}
+.ant-table
+  .ant-table-content
+  .ant-table-tbody
+  .expanded-row-container
+  .expanded-col-content
+  .expanded-col
+  .col
+  label {
+  color: rgba(0, 0, 0, 0.85);
+  font-weight: 500;
 }

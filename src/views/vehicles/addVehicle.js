@@ -1,15 +1,23 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Modal } from 'antd';
+import uuid from 'react-uuid';
 import { TextField, Button, Select, MenuItem } from '@material-ui/core';
 import { Formik } from 'formik';
 import { addVehicle } from '../../actions/cartypeactions';
 
-const AddVehicle = () => {
+const AddVehicle = ({
+  isModalVisible,
+  setIsModalVisible,
+  seteditKey,
+  editKey,
+}) => {
   const dispatch = useDispatch();
+  const [uniqueID, setuniqueID] = useState(uuid());
   const cartypes = useSelector((state) => state.cartypes);
   const [vehicledata, setvehicledata] = useState([]);
-  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [editedVehicle, seteditedVehicle] = useState([]);
+
   const [vehicleTypes, setvehicleTypes] = useState([]);
   const [vehicleTags, setvehicleTags] = useState([]);
   const [SelectedVehicle, setSelectedVehicle] = useState('none');
@@ -39,13 +47,22 @@ const AddVehicle = () => {
       setvehicledata(cartypes?.cars);
     }
   }, [cartypes?.cars]);
+  useEffect(() => {
+    if (editKey) {
+      seteditedVehicle(
+        vehicledata?.filter((vehicle) => vehicle.key === editKey)
+      );
+    }
+  }, [editKey]);
+  console.log('editve', editedVehicle);
+  console.log('kkey', editKey);
   return (
     <>
       <Button variant='contained' color='primary' onClick={showModal}>
         Add Vehicle
       </Button>
       <Modal
-        title='Add a New Vehicle'
+        title={editKey ? 'Edit Vehicle' : 'Add a New Vehicle'}
         visible={isModalVisible}
         //onOk={this.handleOk}
         onCancel={handleCancel}
@@ -53,18 +70,20 @@ const AddVehicle = () => {
         height={700}
       >
         <Formik
+          // enableReinitialize
           initialValues={{
-            name: '',
-            convenience_fees: '',
-            min_fare: '',
-            rate_per_hour: '',
-            rate_per_kilometer: '',
-            image: '',
-            personSeats: '',
-            busiClass: '',
-            wheelChair: '',
-            vehicleType: SelectedVehicle,
-            vehicleTags: selectedTags,
+            key: editKey ? editedVehicle[0]?.key : uniqueID,
+            name: editKey ? editedVehicle[0]?.name : '',
+            convenience_fees: editKey ? editedVehicle.convenience_fees : '',
+            min_fare: editKey ? editedVehicle.min_fare : '',
+            rate_per_hour: editKey ? editedVehicle.rate_per_hour : '',
+            rate_per_kilometer: editKey ? editedVehicle.rate_per_kilometer : '',
+            image: editKey ? editedVehicle.image : '',
+            personSeats: editKey ? editedVehicle.personSeats : '',
+            busiClass: editKey ? editedVehicle.busiClass : '',
+            wheelChair: editKey ? editedVehicle.wheelChair : '',
+            vehicleType: editKey ? editedVehicle.vehicleType : SelectedVehicle,
+            vehicleTags: editKey ? editedVehicle.vehicleTags : selectedTags,
           }}
           validate={(values) => {
             const errors = {};
@@ -100,7 +119,13 @@ const AddVehicle = () => {
           }}
           onSubmit={(values) => {
             console.log('dati', vehicledata);
-            dispatch(addVehicle(vehicledata));
+            dispatch(addVehicle([...vehicledata, values]));
+            setuniqueID(uuid());
+            // resetForm({
+            //   values: {
+            //     key: uuid(),
+            //   },
+            // });
             setIsModalVisible(false);
           }}
         >
@@ -230,7 +255,8 @@ const AddVehicle = () => {
                 }}
               >
                 <MenuItem value='none'> Select Your Vehicle Type</MenuItem>
-                {vehicleTypes.length > 0 ? (
+                {vehicleTypes?.filter((vehicle) => vehicle.enabled === true)
+                  .length > 0 ? (
                   vehicleTypes?.map((vehicle, counter) => {
                     return (
                       <MenuItem key={counter} value={vehicle.name}>
@@ -239,7 +265,7 @@ const AddVehicle = () => {
                     );
                   })
                 ) : (
-                  <MenuItem value='disabled'>
+                  <MenuItem disabled value='disabled'>
                     Vehicle type not Available{' '}
                   </MenuItem>
                 )}
@@ -254,7 +280,8 @@ const AddVehicle = () => {
                 onChange={(e) => setselectedTags(e.target.value)}
               >
                 <MenuItem value='none'> Select Your Vehicle Tags </MenuItem>
-                {vehicleTags.length > 0 ? (
+                {vehicleTags?.filter((tag) => tag.enabled === true).length >
+                0 ? (
                   vehicleTags?.map((tagger, counter) => {
                     return (
                       <MenuItem key={counter} value={tagger.tagName}>
@@ -291,7 +318,7 @@ const AddVehicle = () => {
                 <Button
                   variant='contained'
                   color='primary'
-                  onClick={() => setvehicledata([...vehicledata, values])}
+                  // onClick={() => setvehicledata([...vehicledata, values])}
                   type='submit'
                 >
                   Submit

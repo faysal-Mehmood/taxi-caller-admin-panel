@@ -11,14 +11,6 @@ const VehicleTags = () => {
   const [vehicleTagName, setvehicleTagName] = useState('');
   const [newVehicleTag, setnewVehicleTag] = useState([]);
   const [vehicleTags, setvehicleTags] = useState([]);
-
-  function onChange(value) {
-    console.log(`selected ${value}`);
-    setvehicleTagName(value);
-  }
-  function onSearch(val) {
-    console.log('search:', val);
-  }
   useEffect(() => {
     if (cartypes?.vehicleTags) {
       setvehicleTags(cartypes?.vehicleTags);
@@ -29,70 +21,80 @@ const VehicleTags = () => {
   return (
     <div className='vehicle-type-container'>
       <div className='vehicle-type-area'>
-        {vehicleTags?.map((vehicle, counter) => {
-          return (
-            <div className='vehicle-type-content' key={counter}>
-              <Input
-                className='vehicle-type'
-                name={vehicle.tagName}
-                value={vehicle.tagName}
-                readOnly
-              />
-              <div className='vehicle-enable-checkbox'>
-                <input
-                  type='checkbox'
+        {vehicleTags?.length > 0 ? (
+          vehicleTags?.map((vehicle, counter) => {
+            return (
+              <div className='vehicle-type-content' key={counter}>
+                <Input
+                  className='vehicle-type'
                   name={vehicle.tagName}
-                  checked={vehicle.enabled}
-                  onChange={(e) => {
-                    const vehicleTagIndex = vehicleTags?.filter(
-                      (vehicle1) => vehicle1.id === vehicle.id
-                    );
-
-                    if (e.target.checked) {
-                      vehicleTagIndex && (vehicleTagIndex[0].enabled = true);
-                    } else {
-                      vehicleTagIndex && (vehicleTagIndex[0].enabled = false);
-                    }
-                    setnewVehicleTag([...newVehicleTag, vehicleTagIndex[0]]);
-                    dispatch(editVehicleTags(newVehicleTag));
-                  }}
+                  value={vehicle.tagName}
+                  readOnly
                 />
-                <label>Enabled</label>
+                <div className='vehicle-enable-checkbox'>
+                  <input
+                    type='checkbox'
+                    name={vehicle.tagName}
+                    checked={vehicle.enabled}
+                    onChange={(e) => {
+                      const vehicleTagIndex = vehicleTags?.filter(
+                        (vehicle1) => vehicle1.id === vehicle.id
+                      );
+
+                      if (e.target.checked) {
+                        vehicleTagIndex && (vehicleTagIndex[0].enabled = true);
+                      } else {
+                        vehicleTagIndex && (vehicleTagIndex[0].enabled = false);
+                      }
+                      setnewVehicleTag([...newVehicleTag, vehicleTagIndex[0]]);
+                      dispatch(editVehicleTags(newVehicleTag));
+                    }}
+                  />
+                  <label>Enabled</label>
+                  <label
+                    className='del-icon'
+                    onClick={(e) => {
+                      const filteredTags = vehicleTags?.filter(
+                        (vehicle1) => vehicle1.id !== vehicle.id
+                      );
+                      dispatch(editVehicleTags(filteredTags));
+                    }}
+                  >
+                    x
+                  </label>
+                </div>
               </div>
-            </div>
-          );
-        })}
+            );
+          })
+        ) : (
+          <p>No vehicle tags Available</p>
+        )}
         {/* {cartypes?.error?.flag && <p>{cartypes?.error?.msg}</p>} */}
       </div>
-      <Select
-        style={{ marginRight: '10px' }}
-        placeholder='Select a New Tag'
-        optionFilterProp='children'
-        onChange={onChange}
-        onSearch={onSearch}
-        filterOption={(input, option) =>
-          option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-        }
+      <Input
+        style={{ marginBottom: '10px' }}
+        placeholder='Select a new tag'
+        value={vehicleTagName}
+        onChange={(e) => {
+          setvehicleTagName(e.target.value);
+        }}
         onBlur={(e) => {
           if (vehicleTagName) {
             setnewVehicleTag([
               ...newVehicleTag,
               { id: uuid(), tagName: vehicleTagName, enabled: true },
             ]);
-            setvehicleTagName('');
           }
         }}
-      >
-        <Option value='Comfortable'>Comfortable</Option>
-        <Option value='Pet-friendly'>Pet friendly</Option>
-        <Option value='No-smoking'>No Smoking</Option>
-      </Select>
+      />
+
       <Button
         type='primary'
         className=''
         onClick={() => {
           if (newVehicleTag) {
             dispatch(editVehicleTags(newVehicleTag));
+            setvehicleTagName('');
           }
         }}
       >

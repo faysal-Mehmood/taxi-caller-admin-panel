@@ -32,6 +32,8 @@ function TabPanel(props) {
 }
 const Index = () => {
   const [tabvalue, settabValue] = useState('0');
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [editKey, seteditKey] = useState('');
   const handleChange = (event, newValue) => {
     settabValue(newValue);
   };
@@ -48,10 +50,19 @@ const Index = () => {
           <Tab label='Tags' value='2' />
           <Tab label='Archive' value='3' />
         </Tabs>
-        <AddVehicle />
+        <AddVehicle
+          isModalVisible={isModalVisible}
+          setIsModalVisible={setIsModalVisible}
+          seteditKey={seteditKey}
+          editKey={editKey}
+        />
       </div>
       <TabPanel value={tabvalue} index='0'>
-        <Vehicles />
+        <Vehicles
+          isModalVisible={isModalVisible}
+          setIsModalVisible={setIsModalVisible}
+          seteditKey={seteditKey}
+        />
       </TabPanel>
       <TabPanel value={tabvalue} index='1'>
         <VehicleType />

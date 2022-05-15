@@ -7,6 +7,7 @@ import {
   FETCH_VEHICLE_TYPES_SUCCESS,
   FETCH_VEHICLE_TYPES_FAILED,
   ADD_VEHICLE,
+  EDIT_VEHICLE,
   EDIT_VEHICLE_TAGS,
   FETCH_VEHICLE_TAGS_SUCCESS,
   FETCH_VEHICLE_TAGS_FAILED,
@@ -35,6 +36,14 @@ export const fetchCarTypes = () => (dispatch) => {
 export const addVehicle = (vehiclesdata) => (dispatch) => {
   dispatch({
     type: ADD_VEHICLE,
+    payload: vehiclesdata,
+  });
+  vehiclesRef.set(vehiclesdata);
+};
+//edit vahiclle
+export const editVehicle = (vehiclesdata) => (dispatch) => {
+  dispatch({
+    type: EDIT_VEHICLE,
     payload: vehiclesdata,
   });
   vehiclesRef.set(vehiclesdata);
