@@ -4,59 +4,15 @@ import languageJson from '../../config/language';
 import { useSelector, useDispatch } from 'react-redux';
 import { editVehicle } from '../../actions/cartypeactions';
 import AddVehicle from './addVehicle';
-// const columns = [
-//   { title: 'Name', dataIndex: 'name', key: 'name' },
-//   { title: 'Age', dataIndex: 'age', key: 'age' },
-//   { title: 'Address', dataIndex: 'address', key: 'address' },
-//   {
-//     title: 'Action',
-//     dataIndex: '',
-//     key: 'x',
-//     render: () => <a>Delete</a>,
-//   },
-// ];
-
-// const data = [
-//   {
-//     key: 1,
-//     name: 'John Brown',
-//     age: 32,
-//     address: 'New York No. 1 Lake Park',
-//     description:
-//       'My name is John Brown, I am 32 years old, living in New York No. 1 Lake Park.',
-//   },
-//   {
-//     key: 2,
-//     name: 'Jim Green',
-//     age: 42,
-//     address: 'London No. 1 Lake Park',
-//     description:
-//       'My name is Jim Green, I am 42 years old, living in London No. 1 Lake Park.',
-//   },
-//   {
-//     key: 3,
-//     name: 'Not Expandable',
-//     age: 29,
-//     address: 'Jiangsu No. 1 Lake Park',
-//     description: 'This not expandable',
-//   },
-//   {
-//     key: 4,
-//     name: 'Joe Black',
-//     age: 32,
-//     address: 'Sidney No. 1 Lake Park',
-//     description:
-//       'My name is Joe Black, I am 32 years old, living in Sidney No. 1 Lake Park.',
-//   },
-// ];
-
 const Vehicles = ({ isModalVisible, setIsModalVisible, seteditKey }) => {
   const cartypes = useSelector((state) => state.cartypes);
   const [carsdata, setcarsdata] = useState([]);
   const dispatch = useDispatch();
   const handleDelete = (key) => {
-    // setcarsdata(carsdata?.filter((car) => car.key !== key));
-    dispatch(editVehicle(carsdata?.filter((car) => car.key !== key)));
+    var deleted = carsdata?.filter((car) => car.key === key);
+    deleted[0].isdeleted = true;
+    console.log('del', [...carsdata, deleted[0]]);
+    // dispatch(editVehicle(carsdata));
   };
   const columns = [
     {
@@ -72,17 +28,6 @@ const Vehicles = ({ isModalVisible, setIsModalVisible, seteditKey }) => {
       dataIndex: 'name',
       key: languageJson.name,
       sorter: (a, b) => a.name.localeCompare(b.name),
-      // filters: [
-      //   {
-      //     text: 'London',
-      //     value: 'London',
-      //   },
-      //   {
-      //     text: 'New York',
-      //     value: 'New York',
-      //   },
-      // ],
-      // onFilter: (value, record) => record.name.indexOf(value) === 0,
     },
     {
       title: languageJson.rate_per_km,
@@ -135,7 +80,7 @@ const Vehicles = ({ isModalVisible, setIsModalVisible, seteditKey }) => {
   ];
   useEffect(() => {
     if (cartypes.cars) {
-      setcarsdata(cartypes.cars);
+      setcarsdata(cartypes?.cars.filter((car) => car.isdeleted === false));
     }
   }, [cartypes.cars]);
   return (

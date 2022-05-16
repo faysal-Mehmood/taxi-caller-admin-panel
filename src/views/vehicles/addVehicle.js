@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Modal } from 'antd';
+import { Modal, Spin } from 'antd';
 import uuid from 'react-uuid';
 import { TextField, Button, Select, MenuItem } from '@material-ui/core';
 import { Formik } from 'formik';
-import { addVehicle } from '../../actions/cartypeactions';
+import { addVehicle, editVehicle } from '../../actions/cartypeactions';
 
 const AddVehicle = ({
   isModalVisible,
@@ -14,6 +14,7 @@ const AddVehicle = ({
 }) => {
   const dispatch = useDispatch();
   const [uniqueID, setuniqueID] = useState(uuid());
+  const [isSpin, setisSpin] = useState(false);
   const cartypes = useSelector((state) => state.cartypes);
   const [vehicledata, setvehicledata] = useState([]);
   const [editedVehicle, seteditedVehicle] = useState([]);
@@ -48,17 +49,20 @@ const AddVehicle = ({
     }
   }, [cartypes?.cars]);
   useEffect(() => {
-    if (editKey) {
-      seteditedVehicle(
-        vehicledata?.filter((vehicle) => vehicle.key === editKey)
-      );
-    }
+    seteditedVehicle(vehicledata?.filter((vehicle) => vehicle.key === editKey));
   }, [editKey]);
   console.log('editve', editedVehicle);
   console.log('kkey', editKey);
   return (
     <>
-      <Button variant='contained' color='primary' onClick={showModal}>
+      <Button
+        variant='contained'
+        color='primary'
+        onClick={() => {
+          seteditKey('');
+          showModal();
+        }}
+      >
         Add Vehicle
       </Button>
       <Modal
@@ -70,20 +74,26 @@ const AddVehicle = ({
         height={700}
       >
         <Formik
-          // enableReinitialize
+          enableReinitialize
           initialValues={{
-            key: editKey ? editedVehicle[0]?.key : uniqueID,
-            name: editKey ? editedVehicle[0]?.name : '',
-            convenience_fees: editKey ? editedVehicle.convenience_fees : '',
-            min_fare: editKey ? editedVehicle.min_fare : '',
-            rate_per_hour: editKey ? editedVehicle.rate_per_hour : '',
-            rate_per_kilometer: editKey ? editedVehicle.rate_per_kilometer : '',
-            image: editKey ? editedVehicle.image : '',
-            personSeats: editKey ? editedVehicle.personSeats : '',
-            busiClass: editKey ? editedVehicle.busiClass : '',
-            wheelChair: editKey ? editedVehicle.wheelChair : '',
-            vehicleType: editKey ? editedVehicle.vehicleType : SelectedVehicle,
-            vehicleTags: editKey ? editedVehicle.vehicleTags : selectedTags,
+            key: editKey !== '' ? editedVehicle.key : uniqueID,
+            name: editKey !== '' ? editedVehicle[0]?.name : '',
+            convenience_fees:
+              editKey !== '' ? editedVehicle[0]?.convenience_fees : '',
+            min_fare: editKey !== '' ? editedVehicle[0]?.min_fare : '',
+            rate_per_hour:
+              editKey !== '' ? editedVehicle[0]?.rate_per_hour : '',
+            rate_per_kilometer:
+              editKey !== '' ? editedVehicle[0]?.rate_per_kilometer : '',
+            image: editKey !== '' ? editedVehicle[0]?.image : '',
+            personSeats: editKey !== '' ? editedVehicle[0]?.personSeats : '',
+            busiClass: editKey !== '' ? editedVehicle[0]?.busiClass : '',
+            wheelChair: editKey !== '' ? editedVehicle[0]?.wheelChair : '',
+            vehicleType:
+              editKey !== '' ? editedVehicle[0]?.vehicleType : SelectedVehicle,
+            vehicleTags:
+              editKey !== '' ? editedVehicle[0]?.vehicleTags : selectedTags,
+            isdeleted: false,
           }}
           validate={(values) => {
             const errors = {};
@@ -114,19 +124,28 @@ const AddVehicle = ({
             if (!values.wheelChair) {
               errors.wheelChair = 'required';
             }
-
             return errors;
           }}
           onSubmit={(values) => {
-            console.log('dati', vehicledata);
-            dispatch(addVehicle([...vehicledata, values]));
-            setuniqueID(uuid());
+            console.log('values', vehicledata);
+            setisSpin(true);
+            setTimeout(() => {
+              if (editKey !== '') {
+                dispatch(editVehicle([...vehicledata, values]));
+                seteditKey('');
+              } else {
+                dispatch(addVehicle([...vehicledata, values]));
+                setuniqueID(uuid());
+              }
+              setisSpin(false);
+              setIsModalVisible(false);
+            }, 4000);
+
             // resetForm({
             //   values: {
             //     key: uuid(),
             //   },
             // });
-            setIsModalVisible(false);
           }}
         >
           {({
@@ -321,7 +340,7 @@ const AddVehicle = ({
                   // onClick={() => setvehicledata([...vehicledata, values])}
                   type='submit'
                 >
-                  Submit
+                  {isSpin ? <Spin /> : editKey ? 'Update' : 'Submit'}
                 </Button>
               </div>
             </form>
