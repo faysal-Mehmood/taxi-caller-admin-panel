@@ -81,14 +81,14 @@ export default function Users() {
           {usersdata.loading ? (
             <CircularLoading />
           ) : (
-            <Usertable data={adminData} car={cars} />
+            <Usertable filterData={adminData} car={cars} data={data} />
           )}
         </TabPanel>
         <TabPanel value={tabvalue} index='driver'>
           {usersdata.loading ? (
             <CircularLoading />
           ) : (
-            <Usertable data={driverData} car={cars} />
+            <Usertable filterData={driverData} car={cars} data={data} />
           )}
         </TabPanel>
       </>
